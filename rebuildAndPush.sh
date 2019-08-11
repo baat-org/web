@@ -1,10 +1,5 @@
-export SERVICE=web
-export VERSION=1.0
-
-docker rmi $(docker images -qa -f 'dangling=true')
+docker rmi $(docker images -qa 'sachingoyaldocker/baat-org-web')
 
 ./gradlew clean build bootJar
-
-docker build --no-cache -t sachingoyaldocker/baat-org-${SERVICE}:${VERSION} . 
-
-docker push sachingoyaldocker/baat-org-${SERVICE}:${VERSION}
+docker build --no-cache -t sachingoyaldocker/baat-org-web:1.0 . 
+docker push sachingoyaldocker/baat-org-web:1.0
