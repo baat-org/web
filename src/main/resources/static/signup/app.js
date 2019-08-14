@@ -14,14 +14,14 @@ $(document).ready(function () {
             data: signupRequest,
             success: function (userToken) {
                 Cookies.set("X-Auth-Token", userToken);
-                window.location.href = "http://" + location.hostname + ":8082/"
+                window.location.href = window.location.origin
             },
             error: function (data) {
                 $('#error-message').text(data.responseText)
             },
             processData: false,
             type: 'PUT',
-            url: "http://" + location.hostname + ":8081/signup"
+            url: window.user_api_uri + "/signup"
         });
     });
 });

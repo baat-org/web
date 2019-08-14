@@ -16,7 +16,7 @@ $(document).ready(function () {
         },
         processData: false,
         type: 'GET',
-        url: "http://" + location.hostname + ":8081/userForToken/" + userToken
+        url: window.user_api_uri + "/userForToken/" + userToken
     });
 
     function showCurrentUserInfo(userInfo) {
@@ -24,7 +24,7 @@ $(document).ready(function () {
     }
 
     function createWebSocket(userToken) {
-        var ws = new WebSocket("ws://" + location.hostname + ":8083/baat-ws");
+        var ws = new WebSocket(window.websockets_api_uri);
 
         ws.onmessage = function (event) {
             var replyMessage = JSON.parse(event.data),
@@ -88,7 +88,7 @@ $(document).ready(function () {
             },
             processData: false,
             type: 'GET',
-            url: "http://" + location.hostname + ":8081/users/"
+            url: window.user_api_uri + "/users/"
         });
     }
 
@@ -114,7 +114,7 @@ $(document).ready(function () {
                 },
                 processData: false,
                 type: 'PUT',
-                url: "http://" + location.hostname + ":8084/"
+                url: window.chat_api_uri
             });
         });
     }
