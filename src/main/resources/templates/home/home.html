@@ -3,15 +3,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
-    <script>
-        window.user_api_uri = [[${userApiURI}]];
-        window.chat_api_uri = [[${chatApiURI}]];
-        window.websockets_api_uri = [[${websocketsApiURI}]];
+    <link th:href="@{webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+    <script type="application/javascript">
+        window.user_api_uri = "[[${userApiURI}]]";
+        window.chat_api_uri = "[[${chatApiURI}]]";
+        window.websockets_uri = "[[${websocketsURI}]]";
     </script>
-    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-    <script th:src="@{/common/js-cookie.js}"></script>
-    <script th:src="@{/home/app.js}"></script>
+    <script type="application/javascript" th:src="@{webjars/jquery/jquery.min.js}"></script>
+    <script type="application/javascript" th:src="@{common/js-cookie.js}"></script>
+    <script type="application/javascript" th:src="@{home/app.js}"></script>
     <script id="recipient-user-id" type="application/javascript"></script>
 </head>
 <body>

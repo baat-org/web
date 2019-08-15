@@ -22,8 +22,8 @@ public class WebController {
 	@Value("${chat_api_uri}")
 	private String chatApiURI;
 
-	@Value("${websockets_api_uri}")
-	private String websocketsApiURI;
+	@Value("${websockets_uri}")
+	private String websocketsURI;
 
 	@Value("${user_service_uri}")
 	private String userServiceURI;
@@ -61,7 +61,7 @@ public class WebController {
 	private void addURIsToModel( final Model model ) {
 		model.addAttribute( "userApiURI", userApiURI );
 		model.addAttribute( "chatApiURI", chatApiURI );
-		model.addAttribute( "websocketsApiURI", websocketsApiURI );
+		model.addAttribute( "websocketsURI", websocketsURI );
 	}
 
 	private boolean validUserToken( final String userToken ) {

@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script>
-        window.user_api_uri = [[${userApiURI}]];
-        window.chat_api_uri = [[${chatApiURI}]];
-        window.websockets_api_uri = [[${websocketsApiURI}]];
+        window.user_api_uri = "[[${userApiURI}]]";
+        window.chat_api_uri = "[[${chatApiURI}]]";
+        window.websockets_uri = "[[${websocketsURI}]]";
     </script>
-    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
-    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-    <script th:src="@{/common/js-cookie.js}"></script>
-    <script th:src="@{/signup/app.js}"></script>
+    <link th:href="@{webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+    <script type="application/javascript" th:src="@{webjars/jquery/jquery.min.js}"></script>
+    <script type="application/javascript" th:src="@{common/js-cookie.js}"></script>
+    <script type="application/javascript" th:src="@{signup/app.js}"></script>
 </head>
 <body>
 

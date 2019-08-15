@@ -24,7 +24,7 @@ $(document).ready(function () {
     }
 
     function createWebSocket(userToken) {
-        var ws = new WebSocket(window.websockets_api_uri);
+        var ws = new WebSocket(window.websockets_uri);
 
         ws.onmessage = function (event) {
             var replyMessage = JSON.parse(event.data),

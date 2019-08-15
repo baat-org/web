@@ -3,5 +3,5 @@ server:
 
 user_api_uri: ${USER_API_URI}
 chat_api_uri: ${CHAT_API_URI}
-websockets_api_uri: ${WEBSOCKETS_API_URI}
+websockets_uri: ${WEBSOCKETS_URI}
 user_service_uri: ${USER_SERVICE_URI}
