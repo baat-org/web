@@ -1,9 +1,5 @@
 package org.baat.web.controller;
 
-import static org.baat.core.constants.Constants.X_AUTH_TOKEN;
-
-import java.net.URI;
-
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -13,69 +9,66 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+
+import static org.baat.core.constants.Constants.X_AUTH_TOKEN;
+
 @Controller
 public class WebController {
 
-	@Value("${user_api_uri}")
-	private String userApiURI;
+    @Value("${gql_api_uri}")
+    private String gqlApiURI;
 
-	@Value("${chat_api_uri}")
-	private String chatApiURI;
+    @Value("${websockets_uri}")
+    private String websocketsURI;
 
-	@Value("${websockets_uri}")
-	private String websocketsURI;
+    @RequestMapping(value = {"/", "home"})
+    public String home(@CookieValue(value = X_AUTH_TOKEN, required = false) final String userToken,
+                       final Model model) {
+        addURIsToModel(model);
 
-	@Value("${user_service_uri}")
-	private String userServiceURI;
+        if (validUserToken(userToken)) {
+            return "home/home.html";
+        } else {
+            return "login/login.html";
+        }
+    }
 
-	@RequestMapping(value = { "/", "home" })
-	public String home( @CookieValue(value = X_AUTH_TOKEN, required = false) final String userToken,
-			final Model model ) {
-		addURIsToModel( model );
+    @RequestMapping(value = "/signup")
+    public String signup(final Model model) {
+        addURIsToModel(model);
+        return "signup/signup.html";
+    }
 
-		if ( validUserToken( userToken ) ) {
-			return "home/home.html";
-		} else {
-			return "login/login.html";
-		}
-	}
+    @RequestMapping(value = "/login")
+    public String login(final Model model) {
+        addURIsToModel(model);
+        return "login/login.html";
+    }
 
-	@RequestMapping(value = "/signup")
-	public String signup( final Model model ) {
-		addURIsToModel( model );
-		return "signup/signup.html";
-	}
+    @RequestMapping(value = "/logout")
+    public String logout(final Model model) {
+        addURIsToModel(model);
+        return "login/logout.html";
+    }
 
-	@RequestMapping(value = "/login")
-	public String login( final Model model ) {
-		addURIsToModel( model );
-		return "login/login.html";
-	}
+    private void addURIsToModel(final Model model) {
+        model.addAttribute("gqlApiURI", gqlApiURI);
+        model.addAttribute("websocketsURI", websocketsURI);
+    }
 
-	@RequestMapping(value = "/logout")
-	public String logout( final Model model ) {
-		addURIsToModel( model );
-		return "login/logout.html";
-	}
+    private boolean validUserToken(final String userToken) {
+        if (StringUtils.isEmpty(userToken)) {
+            return false;
+        }
 
-	private void addURIsToModel( final Model model ) {
-		model.addAttribute( "userApiURI", userApiURI );
-		model.addAttribute( "chatApiURI", chatApiURI );
-		model.addAttribute( "websocketsURI", websocketsURI );
-	}
-
-	private boolean validUserToken( final String userToken ) {
-		if ( StringUtils.isEmpty( userToken ) ) {
-			return false;
-		}
-
-		try {
-			return BooleanUtils.isTrue( new RestTemplate().getForObject(
-					URI.create( userServiceURI + "/validateUserToken/" + userToken ),
-					Boolean.class ) );
-		} catch ( Exception exception ) {
-			//TODO error logging
-			return false;
-		}
-	}
+        try {
+            return BooleanUtils.isTrue(new RestTemplate().getForObject(
+                    URI.create(gqlApiURI + "/validateUserToken/" + userToken),
+                    Boolean.class));
+        } catch (Exception exception) {
+            //TODO error logging
+            return false;
+        }
+    }
 }
