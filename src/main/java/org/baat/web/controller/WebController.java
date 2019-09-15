@@ -22,6 +22,9 @@ public class WebController {
     @Value("${websockets_uri}")
     private String websocketsURI;
 
+    @Value("${user_service_uri}")
+    private String userServiceURI;
+
     @RequestMapping(value = {"/", "home"})
     public String home(@CookieValue(value = X_AUTH_TOKEN, required = false) final String userToken,
                        final Model model) {
@@ -64,7 +67,7 @@ public class WebController {
 
         try {
             return BooleanUtils.isTrue(new RestTemplate().getForObject(
-                    URI.create(gqlApiURI + "/validateUserToken/" + userToken),
+                    URI.create(userServiceURI + "/validateUserToken/" + userToken),
                     Boolean.class));
         } catch (Exception exception) {
             //TODO error logging

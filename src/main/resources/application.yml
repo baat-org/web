@@ -3,3 +3,4 @@ server:
 
 gql_api_uri: ${GQL_API_URI}
 websockets_uri: ${WEBSOCKETS_URI}
+user_service_uri: ${USER_SERVICE_URI}
