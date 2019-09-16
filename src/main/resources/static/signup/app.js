@@ -9,8 +9,12 @@ $(document).ready(function () {
             contentType: 'application/json',
             data: signupRequest,
             success: function (signupResponse) {
-                Cookies.set("X-Auth-Token", signupResponse.data.signup);
-                window.location.href = window.location.origin
+                if (signupResponse && signupResponse.data && signupResponse.data.signup) {
+                    Cookies.set("X-Auth-Token", signupResponse.data.signup);
+                    window.location.href = window.location.origin
+                } else if (signupResponse && signupResponse.errors && signupResponse.errors.length > 0) {
+                    $('#error-message').text(signupResponse.errors[0].message)
+                }
             },
             error: function (data) {
                 $('#error-message').text(data.responseText)

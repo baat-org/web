@@ -2,24 +2,25 @@ $(document).ready(function () {
     $('#login-button').click(function () {
         var userName = $("#username").val();
         var password = $("#password").val();
-        var userCredentials = JSON.stringify({
-            "userName": userName,
-            "password": password
-        });
+        var authenticate = '{"query": "mutation { authenticate ( userName: \\\"' + userName + '\\\", password: \\\"' + password + '\\\")}", "variables": null}';
 
         $.ajax({
             contentType: 'application/json',
-            data: userCredentials,
-            success: function (userToken) {
-                Cookies.set("X-Auth-Token", userToken);
-                window.location.href = window.location.origin
+            data: authenticate,
+            success: function (authenticateResponse) {
+                if (authenticateResponse && authenticateResponse.data && authenticateResponse.data.authenticate) {
+                    Cookies.set("X-Auth-Token", authenticateResponse.data.authenticate);
+                    window.location.href = window.location.origin
+                } else if (authenticateResponse && authenticateResponse.errors && authenticateResponse.errors.length > 0) {
+                    $('#error-message').text(authenticateResponse.errors[0].message)
+                }
             },
             error: function (data) {
                 $('#error-message').text(data.responseText)
             },
             processData: false,
-            type: 'PUT',
-            url: window.user_api_uri + "/authenticate"
+            type: 'POST',
+            url: window.gql_api_uri
         });
     });
     $('#signup-button').click(function () {
