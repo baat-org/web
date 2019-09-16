@@ -102,7 +102,7 @@ $(document).ready(function () {
         $('#send-button').click(function () {
             var recipientUserId = $("#recipient-user-id").val(),
                 textMessage = $("#new-message").val(),
-                chatMessage = '{"query": "mutation { chat ( senderUserToken: \\\"' + userToken + '\\\", recipientUserId: \\\"' + recipientUserId +'\\\", textMessage: \\\"' + textMessage + '\\\")}", "variables": null}';
+                chatMessage = '{"query": "mutation { chat ( senderUserToken: \\\"' + userToken + '\\\", recipientUserId: ' + recipientUserId + ', textMessage: \\\"' + textMessage + '\\\")}", "variables": null}';
 
             $("#message-history-panel").append("<p>" + userInfo.fullName + ": " + textMessage + "</p>");
             $("#new-message").val("");
