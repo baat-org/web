@@ -4,19 +4,22 @@ $(document).ready(function () {
 
     $.ajax({
         contentType: 'application/json',
-        dataType: 'json',
-        success: function (userInfo) {
-            showCurrentUserInfo(userInfo);
-            createWebSocket(userToken);
-            populateUserList();
-            bindSendButton(userToken, userInfo);
+        data: '{"query": "{ userForToken ( userToken: \\\"' + userToken + '\\\") { id, email, fullName, avatarUrl } }", "variables": null, "operationName":null}',
+        success: function (userForTokenResponse) {
+            if (userForTokenResponse && userForTokenResponse.data && userForTokenResponse.data.userForToken) {
+                var userInfo = userForTokenResponse.data.userForToken;
+                showCurrentUserInfo(userInfo);
+                createWebSocket(userToken);
+                populateUserList();
+                bindSendButton(userToken, userInfo);
+            }
         },
         error: function (error) {
             $('#error-message').text(error.responseText)
         },
         processData: false,
-        type: 'GET',
-        url: window.user_api_uri + "/userForToken/" + userToken
+        type: 'POST',
+        url: window.gql_api_uri
     });
 
     function showCurrentUserInfo(userInfo) {
@@ -53,42 +56,45 @@ $(document).ready(function () {
     function populateUserList() {
         $.ajax({
             contentType: 'application/json',
-            dataType: 'json',
-            success: function (userInfos) {
-                for (var i = 0; i < userInfos.length; i++) {
-                    var userInfo = userInfos[i];
-                    $("#user-list").append("<li>" +
-                        "<a id='user-" + userInfo.id + "' data-user-id='" + userInfo.id + "' href='#' class='user-link btn btn-default''>" +
-                        "<strong>" + userInfo.fullName + "</strong>" +
-                        "</a>" +
-                        "</li>");
+            data: '{"query": "{ users { id, email, fullName, avatarUrl } }", "variables": null, "operationName":null}',
+            success: function (usersResponse) {
+                if (usersResponse && usersResponse.data && usersResponse.data.users) {
+                    var userInfos = usersResponse.data.users;
+                    for (var i = 0; i < userInfos.length; i++) {
+                        var userInfo = userInfos[i];
+                        $("#user-list").append("<li>" +
+                            "<a id='user-" + userInfo.id + "' data-user-id='" + userInfo.id + "' href='#' class='user-link btn btn-default''>" +
+                            "<strong>" + userInfo.fullName + "</strong>" +
+                            "</a>" +
+                            "</li>");
+                    }
+
+                    $("body").on("click", "a.user-link", function () {
+                        var $userLink = $(this),
+                            $allUserLinks = $("a.user-link"),
+                            userId = $userLink.data("user-id");
+
+
+                        $allUserLinks.removeClass("btn-primary");
+                        $allUserLinks.addClass("btn-default");
+
+                        $userLink.removeClass("btn-default");
+                        $userLink.removeClass("btn-info");
+                        $userLink.addClass("btn-primary");
+
+                        // TODO load user chat history
+                        $("#message-history-panel").empty();
+
+                        $("#recipient-user-id").val(userId);
+                    });
                 }
-
-                $("body").on("click", "a.user-link", function () {
-                    var $userLink = $(this),
-                        $allUserLinks = $("a.user-link"),
-                        userId = $userLink.data("user-id");
-
-
-                    $allUserLinks.removeClass("btn-primary");
-                    $allUserLinks.addClass("btn-default");
-
-                    $userLink.removeClass("btn-default");
-                    $userLink.removeClass("btn-info");
-                    $userLink.addClass("btn-primary");
-
-                    // TODO load user chat history
-                    $("#message-history-panel").empty();
-
-                    $("#recipient-user-id").val(userId);
-                });
             },
             error: function (error) {
                 $('#error-message').text(error.responseText)
             },
             processData: false,
-            type: 'GET',
-            url: window.user_api_uri + "/users/"
+            type: 'POST',
+            url: window.gql_api_uri
         });
     }
 
@@ -96,11 +102,7 @@ $(document).ready(function () {
         $('#send-button').click(function () {
             var recipientUserId = $("#recipient-user-id").val(),
                 textMessage = $("#new-message").val(),
-                chatMessage = JSON.stringify({
-                    "senderUserToken": userToken,
-                    "recipientUserId": recipientUserId,
-                    "textMessage": textMessage
-                });
+                chatMessage = '{"query": "mutation { chat ( senderUserToken: \\\"' + userToken + '\\\", recipientUserId: \\\"' + recipientUserId +'\\\", textMessage: \\\"' + textMessage + '\\\")}", "variables": null}';
 
             $("#message-history-panel").append("<p>" + userInfo.fullName + ": " + textMessage + "</p>");
             $("#new-message").val("");
@@ -113,8 +115,8 @@ $(document).ready(function () {
                     $('#error-message').text(error.responseText)
                 },
                 processData: false,
-                type: 'PUT',
-                url: window.chat_api_uri
+                type: 'POST',
+                url: window.gql_api_uri
             });
         });
     }
