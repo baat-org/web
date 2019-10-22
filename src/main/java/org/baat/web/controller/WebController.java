@@ -1,6 +1,8 @@
 package org.baat.web.controller;
 
 import org.apache.commons.lang3.BooleanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +17,7 @@ import static org.baat.core.constants.Constants.X_AUTH_TOKEN;
 
 @Controller
 public class WebController {
+    private final static Logger LOGGER = LoggerFactory.getLogger(WebController.class);
 
     @Value("${gql_api_uri}")
     private String gqlApiURI;
@@ -70,7 +73,7 @@ public class WebController {
                     URI.create(userServiceURI + "/validateUserToken/" + userToken),
                     Boolean.class));
         } catch (Exception exception) {
-            //TODO error logging
+            LOGGER.error("Error validating user token {}", userToken, exception);
             return false;
         }
     }
