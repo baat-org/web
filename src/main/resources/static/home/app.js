@@ -56,7 +56,7 @@ $(document).ready(function () {
     function populateUserList() {
         $.ajax({
             contentType: 'application/json',
-            data: '{"query": "{ users { id, email, fullName, avatarUrl } }", "variables": null, "operationName":null}',
+            data: '{"query": "{ users ( userToken: \\\"' + userToken + '\\\") { id, email, fullName, avatarUrl } }", "variables": null, "operationName":null}',
             success: function (usersResponse) {
                 if (usersResponse && usersResponse.data && usersResponse.data.users) {
                     var userInfos = usersResponse.data.users;
