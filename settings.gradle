@@ -1,3 +1,5 @@
+plugins {
+    id "com.gradle.enterprise" version "3.6.1"
+}
 rootProject.name = 'web'
-enableFeaturePreview('IMPROVED_POM_SUPPORT')
 
