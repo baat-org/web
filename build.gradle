@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.4.0'
-    id 'io.spring.dependency-management' version '1.0.7.RELEASE'
+    id "io.spring.dependency-management" version "1.0.11.RELEASE"
 }
 
 repositories {
@@ -12,6 +12,7 @@ repositories {
 ext {
     springBootVersion = '2.4.0'
     baatCoreVersion = '1.0'
+    commonsLang3Version = '3.4'
     webJarsVersion = '0.32-1'
     bootstrapVersion = '3.3.7'
     jqueryVersion = '3.1.0'
@@ -27,6 +28,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-security:${project.springBootVersion}"
     implementation "org.springframework.boot:spring-boot-starter-thymeleaf:${project.springBootVersion}"
 
+    implementation "org.apache.commons:commons-lang3:${project.commonsLang3Version}"
     implementation "org.baat:core:${project.baatCoreVersion}"
 
     implementation "org.webjars:webjars-locator:${project.webJarsVersion}"
