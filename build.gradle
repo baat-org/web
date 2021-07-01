@@ -1,25 +1,25 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.4.0'
+    id 'org.springframework.boot' version '2.5.2'
     id "io.spring.dependency-management" version "1.0.11.RELEASE"
 }
 
+sourceCompatibility = 1.15
+targetCompatibility = 1.15
+
 repositories {
-    jcenter()
+    mavenCentral()
     mavenLocal()
 }
 
 ext {
-    springBootVersion = '2.4.0'
+    springBootVersion = '2.5.2'
     baatCoreVersion = '1.0'
     commonsLang3Version = '3.4'
     webJarsVersion = '0.32-1'
     bootstrapVersion = '3.3.7'
     jqueryVersion = '3.1.0'
 }
-
-sourceCompatibility = 1.15
-targetCompatibility = 1.15
 
 dependencies {
     implementation "org.springframework.boot:spring-boot-dependencies:${project.springBootVersion}"
@@ -34,30 +34,8 @@ dependencies {
     implementation "org.webjars:webjars-locator:${project.webJarsVersion}"
     implementation "org.webjars:bootstrap:${project.bootstrapVersion}"
     implementation "org.webjars:jquery:${project.jqueryVersion}"
-
-    components {
-        withModule('org.springframework:spring-beans') {
-            allVariants {
-                withDependencyConstraints {
-                    // Need to patch constraints because snakeyaml is an optional dependency
-                    it.findAll { it.name == 'snakeyaml' }.each { it.version { strictly '1.19' } }
-                }
-            }
-        }
-    }
 }
 
-buildScan {
-
-    // always accept the terms of service
-    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-    termsOfServiceAgree = 'yes'
-
-    // always publish a build scan
-    publishAlways()
+test {
+    useJUnitPlatform()
 }
-
-bootJar {
-    mainClassName = 'org.baat.web.application.WebApplication'
-}
-
